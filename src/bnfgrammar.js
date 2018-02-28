@@ -36,8 +36,7 @@ var grammar = {
     {"name": "ident$ebnf$1", "symbols": [/[a-zA-Z]/]},
     {"name": "ident$ebnf$1", "symbols": ["ident$ebnf$1", /[a-zA-Z]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "ident", "symbols": ["ident$ebnf$1"], "postprocess": function(d) {return d[0].join(""); }},
-    {"name": "rulebody", "symbols": ["wcase"]},
-    {"name": "rulebody", "symbols": ["wcase", "_+", {"literal":"|"}, "_+", "rulebody"]},
+    {"name": "rulebody", "symbols": ["case"]},
     {"name": "wcase", "symbols": ["case"], "postprocess":  function(d) {
         return {
                  type : "case",
@@ -45,10 +44,14 @@ var grammar = {
                };
         } 
         },
-    {"name": "case", "symbols": ["term"]},
+    {"name": "case$ebnf$1", "symbols": ["wesym"], "postprocess": id},
+    {"name": "case$ebnf$1", "symbols": [], "postprocess": function(d) {return null;}},
+    {"name": "case", "symbols": ["term", "case$ebnf$1"]},
     {"name": "case", "symbols": ["term", "_+", "case"]},
-    {"name": "case", "symbols": [{"literal":"("}, "case", {"literal":")"}]},
-    {"name": "case", "symbols": ["case", "wesym"]},
+    {"name": "case$ebnf$2", "symbols": ["wesym"], "postprocess": id},
+    {"name": "case$ebnf$2", "symbols": [], "postprocess": function(d) {return null;}},
+    {"name": "case", "symbols": [{"literal":"("}, "_", "case", "_", {"literal":")"}, "case$ebnf$2"]},
+    {"name": "case", "symbols": ["case", "_+", {"literal":"|"}, "_+", "case"]},
     {"name": "wesym", "symbols": ["esym"], "postprocess":  function(d) {
         return {
                  type : "esym", 

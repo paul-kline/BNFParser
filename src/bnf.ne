@@ -28,7 +28,8 @@ nonterminal -> "<" ident ">"  {% function(d) {
 
 ident -> [a-zA-Z]:+ {% function(d) {return d[0].join(""); } %}
 
-rulebody -> wcase | wcase _+ "|" _+ rulebody 
+#rulebody -> wcase | wcase _+ "|" _+ rulebody 
+rulebody -> case
 
 wcase -> case {% function(d) {
     return {
@@ -37,7 +38,9 @@ wcase -> case {% function(d) {
            };
     } 
     %}
-case -> term | term _+ case | "(" case ")" | case wesym
+#case -> term | term _+ case | "(" case ")" | case wesym
+#case -> term  wesym:? | term _+ case | "(" case ")"  wesym:? 
+case -> term  wesym:? | term _+ case | "(" _ case _  ")"  wesym:? | case _+ "|" _+ case
 
 wesym -> esym  {% function(d) {
     return {

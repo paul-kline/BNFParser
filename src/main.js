@@ -67,7 +67,7 @@ function bnfsubmitted(){
     let enteredText = getEnteredCode();
     let parseTree = parseBNF(enteredText);
     if(!parseTree){return;}
-    
+    console.log("entered text: ", enteredText);
     let nearleycode = parseTreeToNearley(parseTree);
     
     console.log("transcompilation result:\n",nearleycode);
@@ -96,7 +96,12 @@ function validityTest(){
     // Parse something!
     try{
         parser.feed(testString);
-        document.getElementById("testinput").style.backgroundColor = "limeGreen";
+        if(parser.results.length > 0){
+            document.getElementById("testinput").style.backgroundColor = "limeGreen";
+        }else{
+            document.getElementById("testinput").style.backgroundColor = "IndianRed";
+        }
+        
     }catch(e){
         console.log(e);
         document.getElementById("testinput").style.backgroundColor = "IndianRed";
@@ -111,14 +116,14 @@ function validityTest(){
 global.validityTest = validityTest //need this scope for button click entry.
 
 function ontestStringChanged(obj){
-    let val = "" + obj.value;
-    document.getElementById("testinput").style.backgroundColor = "white";
-    if(document.getElementById("onenter").checked && val[val.length-1] == "\n"){
-        console.log(typeof val);
+   // let val = "" + obj.value;
+    //document.getElementById("testinput").style.backgroundColor = "white";
+   // if(document.getElementById("onenter").checked && val[val.length-1] == "\n"){
+    //    console.log(typeof val);
         
-        obj.value = val.trim();
+    //    obj.value = val.trim();
         validityTest();
-    }
+   // } 
     
 }
 global.ontestStringChanged = ontestStringChanged;
@@ -139,18 +144,29 @@ function parseTreeToNearley(data){
     return "" + data;
 } 
 
-//check the defined or nots while we traverse the tree. 
+// //check the defined or nots while we traverse the tree. 
 // function parseTreeToNearley2(tree,state){
     
 //     if(tree == null){state.nearley += " "; return state};
-//     if(tree instanceof Array){ return data.reduce((st,x)=> parseTreeToNearley(x,st),state)}
+//     if(tree instanceof Array){ return data.reduce((st,x)=> parseTreeToNearley2(x,st),state)}
 //     if(typeof data == "object" && data.type){
-//         if(data.type == "rule"){ 
-//             state.defined.push()
-//             return parseTreeToNearley(data.value.nonterminal).trim() + " ->" + parseTreeToNearley(data.value.rulebody);}
-//         if(data.type == "case"){ return parseTreeToNearley(data.value)};
-//         if(data.type == "terminal"){ if(typeof data.value == "string"){return ' "' + data.value + '"'}else{return parseTreeToNearley(data.value) }};
-//         if( data.type == "nonterminal"){ return  " " + parseTreeToNearley(data.value)}; //SPACE
+//         if(data.type == "rule"){
+//             state.inruleleft = true;
+//             let stprime = parseTreeToNearley2(data.value.nonterminal, state); //OTHER FUNCTION CALL. 
+//             stprime.inruleleft = false;
+//             return parseTreeToNearley2(data.value.rulebody, stprime);}
+//         if(data.type == "case"){ return parseTreeToNearley2(data.value, state)};
+//         if(data.type == "terminal"){ if(typeof data.value == "string"){
+//             state.nearley += ' "' + data.value + '"'
+//             return state
+//             }
+//             else{
+//                 return parseTreeToNearley2(data.value,state) }};
+//         if( data.type == "nonterminal"){ 
+//             if(state.inruleleft){
+//                 state.nearley +=
+//             }
+//             return  " " + parseTreeToNearley(data.value)}; //SPACE
 //         if(data.type == "newline"){return "\n";} 
 //         if(data.type == "regex"){return " " + data.value}
 //         if(data.type == "esym"){return ":" + data.value}
