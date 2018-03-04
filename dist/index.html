@@ -12,9 +12,10 @@
 
 <body>
     <div class="w3-bar w3-green">
+        <div class="w3-bar-item w3-btn w3-left w3-border w3-round"  id="about" ><a style="text-decoration:none" href="./about.html">About</a></div>
         <div class="w3-dropdown-hover w3-green w3-right" style="display:none" id="accountbtn">
             <button class="w3-button">My Account</button>
-            
+    
             <div class="w3-dropdown-content w3-bar-block w3-card-4">
                 <a href="#" class="w3-bar-item w3-button">Profile</a>
                 <a href="#" class="w3-bar-item w3-button">My BNFs</a>
@@ -23,7 +24,7 @@
         </div>
         <div class="w3-bar-item w3-btn w3-right w3-border w3-round" style="display:none" id="logoutbtn" onclick="document.getElementById('logoutconfirm').style.display='block'">Log Out</div>
         <div class="w3-bar-item w3-btn w3-right w3-border w3-round" style="display:none" id="loginbtn" onclick="onclicklogin()">Log In</div>
-
+    
     </div>
     <!-- The surrounding HTML is left untouched by FirebaseUI.
          Your app may use that space for branding, controls and other customizations.-->
@@ -44,7 +45,7 @@
                 <div class=" w3-opacity w3-cell-middle w3-left w3-cell  w3-text-gray" id="compilationStatus">uncompiled</div>
             </div>
         </div>
-        <div id="bnferror" class="w3-red"></div>
+        <div id="bnferror" style="font-family: 'Courier New', Courier, monospace" class="w3-red"></div>
     </div>
     <div class="w3-conftainer w3-margin">
         <div>
@@ -57,7 +58,9 @@
             onclick="validityTest()">Test Validity</div>
         <input type="checkbox" id="onenter" checked> Test on Enter key pressed -->
     </div>
-
+    <div class="w3-container">
+        <div class="w3-left w3-cell-middle  w3-cell  w3-btn w3-black w3-border-blue w3-ripple w3-round" id="submit" onclick="onGenerate()">Generate a String</div>
+    </div>
 
 
 

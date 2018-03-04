@@ -26,22 +26,29 @@ nonterminal -> "<" ident ">"  {% function(d) {
     } 
 %}
 
-ident -> [a-zA-Z]:+ {% function(d) {return d[0].join(""); } %}
+ident -> [a-zA-Z_]:+ {% function(d) { 
+  return  {
+     type : "ident",
+     value : d[0].join("") 
+  }
+  } %}
 
-#rulebody -> wcase | wcase _+ "|" _+ rulebody 
-rulebody -> case
+rulebody -> wcase #| wcase _+ "|" _+ rulebody 
+
 
 wcase -> case {% function(d) {
     return {
              type : "case",
              value : d[0]
-           };
+           }
     } 
-    %}
+%}
+
 #case -> term | term _+ case | "(" case ")" | case wesym
 #case -> term  wesym:? | term _+ case | "(" case ")"  wesym:? 
-case -> term  wesym:? | term _+ case | "(" _ case _  ")"  wesym:? | case _+ "|" _+ case
+case -> unit {% id %} | case _+ "|" _+ case |  "(" case ")" | case wesym
 
+unit -> term {% id %} | term _+ unit
 wesym -> esym  {% function(d) {
     return {
              type : "esym", 
@@ -49,9 +56,9 @@ wesym -> esym  {% function(d) {
            };
     } 
 %}
-esym -> "+" | "?" | "*"  {% id %}
+esym -> "+" {% id %}| "?" {% id %}| "*"  {% id %}
 
-term -> nonterminal | terminal {% id %}
+term -> nonterminal {% id %} | terminal {% id %}
 
 terminal -> terminalstr {% function(d) {
     return {

@@ -7,6 +7,8 @@ const codemirror = require("codemirror");
 const bnfmode = require("codemirror/mode/ebnf/ebnf.js")
 const anyhint = require("codemirror/addon/hint/anyword-hint.js");
 const showhint = require("codemirror/addon/hint/show-hint.js");
+const nearleygen = require("nearley-generator");
+global.nearleygen = nearleygen;
 global.CodeMirror = codemirror;
 function compileGrammar(sourceCode) {
     // Parse the grammar source into an AST
@@ -33,7 +35,9 @@ let bnfparser = new nearley.Parser(nearley.Grammar.fromCompiled(bnfgrammar));
 
 
 function parseBNF(str) {
-    str = str.trim();
+    //trim each line:
+    str = str.split("\n").map(x => x.trim()).join("\n");
+    // str = str.trim();
     setBNFError("");
     document.getElementById("compilationStatus").innerText = compilationStatus.compiling;
     // Parse something!
@@ -43,9 +47,11 @@ function parseBNF(str) {
         // parser.results is an array of possible parsings.
         console.log(bnfparser.results); // [[[[ "foo" ],"\n" ]]]
         console.log(bnfparser);
-
+        if(bnfparser.results.length == 0){
+            throw new Error("General Error: Sorry I couldn't be more specific!")
+        }
         document.getElementById("compilationStatus").innerText = compilationStatus.good;
-        return bnfparser.results;
+        return bnfparser.results[0];
         //okay,things went well, let's compile the grammar!
 
     }catch(e){
@@ -61,28 +67,94 @@ function parseBNF(str) {
 
     
 }
- 
+
+
+function checkstate(teststate){
+    let result = {isError : false,
+                  message : ""};
+    teststate.inrulerightSet.forEach(el=>{
+        if(teststate.inruleleftList.includes(el)){
+            //all good here
+        }else{
+            result.isError = true;
+            result.message += "No rule defined for: <" + el + ">\n";
+        }
+    });
+    //now let's check for multiple definitions of a non-terminal:
+    let alreadyreported = new Set();
+    teststate.inruleleftList.forEach((el,i) => {
+        if(teststate.inruleleftList.indexOf(el,i+1) > -1 && !alreadyreported.has(el)){
+            //uhoh, then it's in here twice!
+            result.isError = true;
+            result.message += "Multiple rules defined for: <" + el + ">\n";
+            alreadyreported.add(el);
+        }
+    });
+    return result;
+
+}
 //called when "compile bnf" is clicked.
 function bnfsubmitted(){
     let enteredText = getEnteredCode();
     let parseTree = parseBNF(enteredText);
     if(!parseTree){return;}
     console.log("entered text: ", enteredText);
-    let nearleycode = parseTreeToNearley(parseTree);
-    
+    //let nearleycode = parseTreeToNearley(parseTree);
+    let teststate = parseTreeToNearley2(parseTree, initState());
+    let checkst = checkstate(teststate);
+    if(checkst.isError){
+        setBNFError("Uhoh, looks like you have an error: " + checkst.message);
+        document.getElementById("compilationStatus").innerText = compilationStatus.error;
+    }
+    let nearleycode = teststate.nearley;
+    console.log("STATE RESULT:", teststate);
     console.log("transcompilation result:\n",nearleycode);
-    let compiledgrammer = compileGrammar(nearleycode);
+    let compiledgrammar = compileGrammar(nearleycode);
     //if we made it here, let's save the state. 
     global.state.enteredText = enteredText;
     global.state.parseTree = parseTree; //do I need this?
     global.state.nearleycode = nearleycode;
-    global.state.compiledgrammer = compiledgrammer;
-    console.log("here is my compiled grammar: ", compiledgrammer);
+    global.state.compiledgrammar = compiledgrammar;
+    console.log("here is my compiled grammar: ", compiledgrammar);
 }
 global.bnfsubmitted = bnfsubmitted //need this scope for button click entry.
+global.onGenerate = onGenerate
+function getGenerationRate(){
+    return 0.7;
+}
+function getTermToGenerate(){
+    return 'gpa';
+}
+function onGenerate(){
+    let term = getTermToGenerate();
+    let rate = getGenerationRate();
+    if(isCompiled()){
+        let grammarjs = global.state.compiledgrammar;
+        let currentString = document.getElementById("testinput").value;
+        let res = generateTest(grammarjs,term,rate);
+        while(currentString == res){
+            res = generateTest(grammarjs,term,rate);
+        }
 
+        document.getElementById("testinput").value = res;
+        validityTest();
+
+        console.log("generated string:", res);
+    }else{
+        setBNFError("Please compile your grammar first.");
+    }
+
+
+}
 function setBNFError(str){
-    document.getElementById("bnferror").innerText = str;
+    document.getElementById("bnferror").innerHTML = "<pre>" +  str.replace("<","&lt").replace(">","&gt") + "</pre>";
+}
+function generateTest(jsgrammar,term,rate){
+    console.log("nearleygen:", nearleygen);
+    let g = new nearleygen.default(jsgrammar);
+    let r = g.generate(term, rate);
+    return r;
+
 }
 function validityTest(){
     let testString = getTestString();
@@ -92,7 +164,7 @@ function validityTest(){
         return;      
     }
     //now let's test it!
-    let parser = new nearley.Parser(nearley.Grammar.fromCompiled(global.state.compiledgrammer));
+    let parser = new nearley.Parser(nearley.Grammar.fromCompiled(global.state.compiledgrammar));
     // Parse something!
     try{
         parser.feed(testString);
@@ -137,6 +209,7 @@ function parseTreeToNearley(data){
         if( data.type == "nonterminal"){ return  " " + parseTreeToNearley(data.value)}; //SPACE
         if(data.type == "newline"){return "\n";} 
         if(data.type == "regex"){return " " + data.value}
+        if(data.type == "ident"){return data.value}
         if(data.type == "esym"){return ":" + data.value}
     }
     // if(typeof data == "string"){return " " + data}
@@ -144,37 +217,82 @@ function parseTreeToNearley(data){
     return "" + data;
 } 
 
-// //check the defined or nots while we traverse the tree. 
-// function parseTreeToNearley2(tree,state){
-    
-//     if(tree == null){state.nearley += " "; return state};
-//     if(tree instanceof Array){ return data.reduce((st,x)=> parseTreeToNearley2(x,st),state)}
-//     if(typeof data == "object" && data.type){
-//         if(data.type == "rule"){
-//             state.inruleleft = true;
-//             let stprime = parseTreeToNearley2(data.value.nonterminal, state); //OTHER FUNCTION CALL. 
-//             stprime.inruleleft = false;
-//             return parseTreeToNearley2(data.value.rulebody, stprime);}
-//         if(data.type == "case"){ return parseTreeToNearley2(data.value, state)};
-//         if(data.type == "terminal"){ if(typeof data.value == "string"){
-//             state.nearley += ' "' + data.value + '"'
-//             return state
-//             }
-//             else{
-//                 return parseTreeToNearley2(data.value,state) }};
-//         if( data.type == "nonterminal"){ 
-//             if(state.inruleleft){
-//                 state.nearley +=
-//             }
-//             return  " " + parseTreeToNearley(data.value)}; //SPACE
-//         if(data.type == "newline"){return "\n";} 
-//         if(data.type == "regex"){return " " + data.value}
-//         if(data.type == "esym"){return ":" + data.value}
-//     }
-//     // if(typeof data == "string"){return " " + data}
-//     console.log("unhandled case:", data, "appending anyway");
-//     return "" + data;
-// } 
+
+function initState(){
+    let state = {};
+    state.nearley = "";
+    state.inruleleftList = [];
+    state.inrulerightSet = new Set();
+    state.left = null;
+    console.log("initing state:", state);
+    return state;
+}
+// //check the defined or nots while we traverse the tree.
+//
+ //state.inruleleftList;
+ //state.inrulerightSet;
+ //state.nearley;
+function parseTreeToNearley2(tree, state) {
+    // console.log("state is,", state);
+    if (tree == null) { state.nearley += " "; return state };
+    if (tree instanceof Array) { return tree.reduce((stacc, treebit) => parseTreeToNearley2(treebit, stacc), state) }
+    if (typeof tree == "object" && tree.type) {
+        if (tree.type == "rule") {
+            state.left = true;
+            let stprime = parseTreeToNearley2(tree.value.nonterminal, state); //OTHER FUNCTION CALL.
+            stprime.nearley += " ->"; 
+            console.log("state after left true:", stprime);
+            stprime.left = false;
+            return parseTreeToNearley2(tree.value.rulebody, stprime);
+        }
+        if (tree.type == "case") { return parseTreeToNearley2(tree.value, state) };
+        if (tree.type == "terminal") {
+            if (typeof tree.value == "string") {
+                state.nearley += ' "' + tree.value + '"';
+                return state;
+            }
+            else {
+                return parseTreeToNearley2(tree.value, state)
+            }
+        };
+        if (tree.type == "nonterminal") {
+            if (typeof tree.value == "string") {
+            state.nearley += ' "' + tree.value + '"';
+            return state;
+        }
+        else {
+            return parseTreeToNearley2(tree.value, state)
+        }
+        }; //SPACE todo.
+        if (tree.type == "newline") {
+            state.nearley += "\n";
+            return state;
+        }
+        if (tree.type == "regex") {
+            state.nearley += " " + tree.value;
+            return state;
+        }
+        if (tree.type == "ident") {
+            state.nearley += tree.value
+            if (state.left) {
+                //add to left list
+                state.inruleleftList.push(tree.value);
+            } else {
+                state.inrulerightSet.add(tree.value);
+            }
+            // console.log("on ident,", state);
+            return state;
+        }
+        if (tree.type == "esym") {
+            state.nearley += ":" + tree.value
+            return state;
+        }
+    }
+    // if(typeof data == "string"){return " " + data}
+    console.log("unhandled case:", tree, "appending anyway");
+    state.nearley += "" + tree;
+    return state;
+} 
  
 function getEnteredCode(){
     return editor.doc.getValue();
@@ -196,9 +314,14 @@ function initializeBNFEditor(){
 
 function onEditorChanged(myself, changeObj){
     //console.log("onchange event",myself,changeObj);
-    document.getElementById("compilationStatus").innerText = compilationStatus.modified;
+    getCompilationStatus().innerText = compilationStatus.modified;
 }
-
+function getCompilationStatus(){
+ return document.getElementById("compilationStatus");
+}
+function isCompiled(){
+    return getCompilationStatus().innerText == compilationStatus.good;
+}
 
 let compilationStatus = {
     good : "All good!",
