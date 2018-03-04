@@ -71,13 +71,15 @@ function parseBNF(str) {
 
 function checkstate(teststate){
     let result = {isError : false,
-                  message : ""};
+                  message : "\n"};
     teststate.inrulerightSet.forEach(el=>{
         if(teststate.inruleleftList.includes(el)){
             //all good here
         }else{
             result.isError = true;
+            console.log("in set for each here is elem:", el);
             result.message += "No rule defined for: <" + el + ">\n";
+            console.log("message so far:", result.message);
         }
     });
     //now let's check for multiple definitions of a non-terminal:
@@ -166,7 +168,7 @@ function onGenerate(){
 
 }
 function setBNFError(str){
-    document.getElementById("bnferror").innerHTML = "<pre>" +  str.replace("<","&lt").replace(">","&gt") + "</pre>";
+    document.getElementById("bnferror").innerHTML = "<pre>" +  str.replace(/</g,"&lt").replace(/>/g,"&gt") + "</pre>";
 }
 function generateTest(jsgrammar,term,rate){
     console.log("nearleygen:", nearleygen);
