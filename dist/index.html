@@ -12,10 +12,12 @@
 
 <body>
     <div class="w3-bar w3-green">
-        <div class="w3-bar-item w3-btn w3-left w3-border w3-round"  id="about" ><a style="text-decoration:none" href="./about.html">About</a></div>
+        <div class="w3-bar-item w3-btn w3-left w3-border w3-round" id="about">
+            <a style="text-decoration:none" href="./about.html">About</a>
+        </div>
         <div class="w3-dropdown-hover w3-green w3-right" style="display:none" id="accountbtn">
             <button class="w3-button">My Account</button>
-    
+
             <div class="w3-dropdown-content w3-bar-block w3-card-4">
                 <a href="#" class="w3-bar-item w3-button">Profile</a>
                 <a href="#" class="w3-bar-item w3-button">My BNFs</a>
@@ -24,7 +26,7 @@
         </div>
         <div class="w3-bar-item w3-btn w3-right w3-border w3-round" style="display:none" id="logoutbtn" onclick="document.getElementById('logoutconfirm').style.display='block'">Log Out</div>
         <div class="w3-bar-item w3-btn w3-right w3-border w3-round" style="display:none" id="loginbtn" onclick="onclicklogin()">Log In</div>
-    
+
     </div>
     <!-- The surrounding HTML is left untouched by FirebaseUI.
          Your app may use that space for branding, controls and other customizations.-->
@@ -51,38 +53,42 @@
         <div>
             Test a string below!
             <div>
-                <textarea class="w3-card-4 w3-half" id="testinput" oninput="ontestStringChanged(this)"></textarea> 
+                <textarea class="w3-card-4 w3-half" id="testinput" oninput="ontestStringChanged(this)"></textarea>
             </div>
         </div>
-        
+
         <!-- <div class="ww3-container w3-left w3-cell-middle  w3-cell  w3-btn w3-black w3-border-blue w3-ripple w3-round" id="submit"
             onclick="validityTest()">Test Validity</div>
         <input type="checkbox" id="onenter" checked> Test on Enter key pressed -->
     </div>
     <div class="w3-container w3-bar">
-        <div class="w3-left w3-cell-middle  w3-bar-item w3-cell  w3-btn w3-black w3-border-blue w3-ripple w3-round" id="submit" onclick="onGenerate()">Generate a String</div> <select id="selector" class="w3-bar-item w3-border">
-             
-              </select>
+        <div class="w3-left w3-cell-middle  w3-bar-item w3-cell  w3-btn w3-black w3-border-blue w3-ripple w3-round" id="submit" onclick="onGenerate()">Generate a String</div>
+        <select id="selector" class="w3-bar-item w3-border">
+
+        </select>
     </div>
 
 
 
     <div id="logoutconfirm" class="w3-modal">
-            <div class="w3-modal-content w3-animate-top w3-card-4">
-              <header class="w3-container w3-teal"> 
-                <span onclick="document.getElementById('logoutconfirm').style.display='none'" 
-                class="w3-button w3-display-topright">&times;</span>
+        <div class="w3-modal-content w3-animate-top w3-card-4">
+            <header class="w3-container w3-teal">
+                <span onclick="document.getElementById('logoutconfirm').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                 <h2>Are you sure you want to logout?</h2>
-              </header>
-              <div class="w3-container">
+            </header>
+            <div class="w3-container">
                 <p>Will miss you.</p>
-              </div>
-              <footer class="w3-container w3-teal">
-                <div onclick="document.getElementById('logoutconfirm').style.display='none';onclicklogout()" class="w3-btn">Logout</div><div class="w3-btn" onclick="document.getElementById('logoutconfirm').style.display='none'">Cancel</div>
-              </footer>
             </div>
-          </div>
+            <footer class="w3-container w3-teal">
+                <div onclick="document.getElementById('logoutconfirm').style.display='none';onclicklogout()" class="w3-btn">Logout</div>
+                <div class="w3-btn" onclick="document.getElementById('logoutconfirm').style.display='none'">Cancel</div>
+            </footer>
         </div>
+    </div>
+    <div class="w3-margin">
+        <div onclick="onSaveToURL()" class="w3-btn">Save into URL</div>
+        <input id="urloutput" type="text" onClick="this.select();" value="">    
+    </div>
     <script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
     <script src="myfirebaseauth.js"></script>
 

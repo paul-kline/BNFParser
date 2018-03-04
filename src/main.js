@@ -103,6 +103,12 @@ function populateSelector(arr){
     });
     d.innerHTML = str;
 }
+
+function generateSaveURL(){
+    let enteredText = getEnteredCode();
+    let encoded =  encodeURIComponent(enteredText);
+    return window.location.origin + window.location.pathname + "?bnf=" + encoded;
+}
 //called when "compile bnf" is clicked.
 function bnfsubmitted(){
     let enteredText = getEnteredCode();
@@ -128,6 +134,7 @@ function bnfsubmitted(){
     global.state.nearleycode = nearleycode;
     global.state.compiledgrammar = compiledgrammar;
     console.log("here is my compiled grammar: ", compiledgrammar);
+    return true;
 }
 global.bnfsubmitted = bnfsubmitted //need this scope for button click entry.
 global.onGenerate = onGenerate
@@ -200,15 +207,7 @@ function validityTest(){
 global.validityTest = validityTest //need this scope for button click entry.
 
 function ontestStringChanged(obj){
-   // let val = "" + obj.value;
-    //document.getElementById("testinput").style.backgroundColor = "white";
-   // if(document.getElementById("onenter").checked && val[val.length-1] == "\n"){
-    //    console.log(typeof val);
-        
-    //    obj.value = val.trim();
         validityTest();
-   // } 
-    
 }
 global.ontestStringChanged = ontestStringChanged;
 function parseTreeToNearley(data){
@@ -309,6 +308,9 @@ function parseTreeToNearley2(tree, state) {
 function getEnteredCode(){
     return editor.doc.getValue();
 }
+function setEnteredCode(str){
+    editor.doc.setValue(str);
+}
 function getTestString(){
     return document.getElementById("testinput").value;
 }
@@ -344,3 +346,25 @@ let compilationStatus = {
 global.state = {} //which will hold our bnf and parse info. 
 initializeBNFEditor();
 console.log("main has loaded!!!");
+
+function loadGetBNF(){
+    let ustr = window.location.href;
+    let url = new URL(ustr);
+    let bnf = url.searchParams.get("bnf");
+    if(bnf){
+        console.log("bnf is here! it should be: ", decodeURIComponent(bnf));
+        setEnteredCode(decodeURIComponent(bnf));
+    }
+    console.log(bnf);
+
+}
+function onSaveToURL(){
+   if(bnfsubmitted()){
+    let url =  generateSaveURL();
+    console.log(url);
+    document.getElementById("urloutput").value = url;
+   }
+   
+}
+global.onSaveToURL = onSaveToURL;
+loadGetBNF();
