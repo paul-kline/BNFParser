@@ -36,7 +36,7 @@ let bnfparser = new nearley.Parser(nearley.Grammar.fromCompiled(bnfgrammar));
 
 function parseBNF(str) {
     //trim each line:
-    str = str.split("\n").map(x => x.trim()).join("\n");
+    str = str.split("\n").map(x => x.trim()).join("\n").trim();
     // str = str.trim();
     setBNFError("");
     document.getElementById("compilationStatus").innerText = compilationStatus.compiling;
