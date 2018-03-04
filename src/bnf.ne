@@ -74,7 +74,7 @@ terminal -> terminalstr {% function(d) {
     } 
 %} 
 
-terminalstr -> "\"" validterminal:+  "\"" {% function(d) {return d[1].join(""); } %} | "'" validterminal:+  "'" {% function(d) {return d[1].join(""); } %}
+terminalstr -> "\"" validterminal:+  "\"" {% function(d) {return d[1].join(""); } %} #| "'" (validterminal  ):+  "'" {% function(d) {return d[1].join(""); } %}
 
 regex -> "[" range "]"  {% function(d) {return {
     type : "regex",

@@ -84,9 +84,6 @@ var grammar = {
     {"name": "terminalstr$ebnf$1", "symbols": ["validterminal"]},
     {"name": "terminalstr$ebnf$1", "symbols": ["terminalstr$ebnf$1", "validterminal"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "terminalstr", "symbols": [{"literal":"\""}, "terminalstr$ebnf$1", {"literal":"\""}], "postprocess": function(d) {return d[1].join(""); }},
-    {"name": "terminalstr$ebnf$2", "symbols": ["validterminal"]},
-    {"name": "terminalstr$ebnf$2", "symbols": ["terminalstr$ebnf$2", "validterminal"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
-    {"name": "terminalstr", "symbols": [{"literal":"'"}, "terminalstr$ebnf$2", {"literal":"'"}], "postprocess": function(d) {return d[1].join(""); }},
     {"name": "regex", "symbols": [{"literal":"["}, "range", {"literal":"]"}], "postprocess":  function(d) {return {
         type : "regex",
         value : d.join("")
