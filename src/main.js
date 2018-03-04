@@ -93,6 +93,16 @@ function checkstate(teststate){
     return result;
 
 }
+
+function populateSelector(arr){
+    let d = document.getElementById("selector");
+    console.log(d);
+    let str ="";
+    arr.forEach(e=>{
+        str += "<option value='" + e + "'>&lt" + e + "&gt</option>";
+    });
+    d.innerHTML = str;
+}
 //called when "compile bnf" is clicked.
 function bnfsubmitted(){
     let enteredText = getEnteredCode();
@@ -105,7 +115,9 @@ function bnfsubmitted(){
     if(checkst.isError){
         setBNFError("Uhoh, looks like you have an error: " + checkst.message);
         document.getElementById("compilationStatus").innerText = compilationStatus.error;
+        return;
     }
+    populateSelector(teststate.inruleleftList);
     let nearleycode = teststate.nearley;
     console.log("STATE RESULT:", teststate);
     console.log("transcompilation result:\n",nearleycode);
@@ -123,7 +135,7 @@ function getGenerationRate(){
     return 0.7;
 }
 function getTermToGenerate(){
-    return 'gpa';
+    return document.getElementById("selector").value;
 }
 function onGenerate(){
     let term = getTermToGenerate();
