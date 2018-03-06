@@ -33,10 +33,9 @@ ident -> [a-zA-Z_]:+ {% function(d) {
   }
   } %}
 
-rulebody -> wcase | wcase _+ "|" _+ rulebody 
+rulebody -> rb2
 
-
-wcase -> case {% function(d) {
+cases -> caseX {% function(d) {
     return {
              type : "case",
              value : d[0]
@@ -44,11 +43,62 @@ wcase -> case {% function(d) {
     } 
 %}
 
+
+caseX -> "(" _ caseX _ ")" | caseX caseM | caseX wesym | caseM #| caseX wesym  | case1 _+ "|" _+ caseX | case1 _+ caseX | term
+
+caseM -> caseM _+ caseG | caseM _+ "|" _+ caseG | caseG
+
+caseG -> term 
+
+case1 -> "(" _ case1 _ ")" | case1 wesym  | case2 _+ "|" _+ case1 | case2 _+ case1 | term
+case2 -> "(" _ case2 _ ")" | case2 wesym  | case3 _+ "|" _+ case2 | case3 _+ case2 | term
+case3 -> "(" _ case3 _ ")" | case3 wesym  | case4 _+ "|" _+ case3 | case4 _+ case3 | term
+case4 -> "(" _ case4 _ ")" | case3 wesym  | case5 _+ "|" _+ case4 | case5 _+ case4 | term
+case5 -> "(" _ case5 _ ")" | case3 wesym  | term _+ "|" _+ case5 | term _+ case5 | term
+
+case6 -> term {% id %}
+
+#rb -> rb2 | "(" _ rb2 _ ")" | rb _+ rb2 | rb _+ "|"  _+ rb2 | rb2 wesym
+#rb2 -> term
+rb2 -> rb2 _+ t | rb2 _+ "|" _+   t | t
+t -> t2 wesym | t2
+t2 -> term | "(" _ rb2 _ ")"
+
+
+
+#justin says:
+#rb -> "(" _ rb2 _ ")" | rb2
+#rb2 -> rb2 _+ rb3 | rb3
+#rb3 -> rb3 _+ "|" _+ rb4 | rb4
+#rb4 -> term | rb 
+
+#rb2 -> rb2 _+ rb3 | rb2 _+ "|" _+ rb3 | rb3
+#rb3 ->  rb
+#t ->  term | "(" _ rb _ ")" #| rb wesym
+#rb -> rb2 | "(" _ rb2 _ ")" | rb _+ rb2 | rb _+ "|"  _+ rb2 | rb2 wesym
+#rb2 -> term
+
+#caseP arenthesis
+#caseP -> "(" caseP ")" | case1
+
+#case1 -> case1 _+ "||" _+ case2 | case2
+
+#case2 -> nonterminal {% id %} | terminal {% id %}
+
+#wcase -> case2 {% function(d) {
+ #   return {
+ #            type : "case",
+  #           value : d[0]
+  #         }
+  ##  } 
+#%}
+#<num> ::= "0" | ([1-9] [0-9]+) ("." [0-9]+)?
 #case -> term | term _+ case | "(" case ")" | case wesym
 #case -> term  wesym:? | term _+ case | "(" case ")"  wesym:? 
-case -> unit {% id %} | case _+ "||" _+ case {% function(d){ return [d[0],null,"|",null,d[4]]} %}  |  "(" case ")" | case wesym
+#case2 -> case | case _+ case2
+#case -> term  | term _+ case | case _+ "||" _+ case {% function(d){ return [d[0],null,"|",null,d[4]]} %}  |  "(" case ")" | case wesym
 
-unit -> term {% id %} | term _+ unit
+#unit -> term {% id %} | term _+ unit | "(" unit ")" | unit wesym
 wesym -> esym  {% function(d) {
     return {
              type : "esym", 
