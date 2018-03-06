@@ -33,7 +33,7 @@ ident -> [a-zA-Z_]:+ {% function(d) {
   }
   } %}
 
-rulebody -> wcase #| wcase _+ "|" _+ rulebody 
+rulebody -> wcase | wcase _+ "|" _+ rulebody 
 
 
 wcase -> case {% function(d) {
@@ -46,7 +46,7 @@ wcase -> case {% function(d) {
 
 #case -> term | term _+ case | "(" case ")" | case wesym
 #case -> term  wesym:? | term _+ case | "(" case ")"  wesym:? 
-case -> unit {% id %} | case _+ "|" _+ case |  "(" case ")" | case wesym
+case -> unit {% id %} | case _+ "||" _+ case {% function(d){ return [d[0],null,"|",null,d[4]]} %}  |  "(" case ")" | case wesym
 
 unit -> term {% id %} | term _+ unit
 wesym -> esym  {% function(d) {

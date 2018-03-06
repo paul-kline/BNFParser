@@ -2,6 +2,16 @@
 <html>
 
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115035878-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-115035878-1');
+    </script>
+    
     <meta charset="UTF-8">
     <title>BNF Playground</title>
     
@@ -54,6 +64,8 @@
          Your app may use that space for branding, controls and other customizations.-->
     <h1 class="w3-center">Welcome to the BNF Playground</h1>
     <h1 class="w3-center">Beta!</h1>
+    <div class="w3-container w3-center">A place to design and test context free grammars using Bachus Naur Form</div>
+
     <div class="w3-container w3-right" id="greeting"></div>
 
     <div id="editbnf" class="w3-container w3-margin">

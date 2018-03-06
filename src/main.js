@@ -47,6 +47,7 @@ function parseBNF(str) {
         // parser.results is an array of possible parsings.
         console.log(bnfparser.results); // [[[[ "foo" ],"\n" ]]]
         console.log(bnfparser);
+        global.parserresults=bnfparser.results;
         if(bnfparser.results.length == 0){
             throw new Error("General Error: Sorry I couldn't be more specific!")
         }
@@ -64,10 +65,42 @@ function parseBNF(str) {
         bnfparser = new nearley.Parser(nearley.Grammar.fromCompiled(bnfgrammar));
     }
 
+    
 
     
 }
 
+
+//----------------------------
+// Parser.prototype.finish = function() {
+//     // Return the possible parsings
+//     var considerations = [];
+//     var start = this.grammar.start;
+//     var column = this.table[this.table.length - 1]
+//     let ggag = Symbol();
+//     try{
+//         column.states.forEach(function (t) {
+//             if (t.rule.name === start
+//                     && t.dot === t.rule.symbols.length
+//                     && t.reference === 0
+//                     && t.data !== Parser.fail
+//                     && considerations.length < 1) {
+//                 considerations.push(t);
+//                 throw ggag;
+//             }
+//         });
+//     }catch(e){
+//         if(e === ggag){
+
+//         }else{
+//             throw e;
+//         }
+//     }
+    
+//     return considerations.map(function(c) {return c.data; });
+// };
+
+//-------------------------------------
 
 function checkstate(teststate){
     let result = {isError : false,

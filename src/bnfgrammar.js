@@ -42,6 +42,7 @@ var grammar = {
         }
         } },
     {"name": "rulebody", "symbols": ["wcase"]},
+    {"name": "rulebody", "symbols": ["wcase", "_+", {"literal":"|"}, "_+", "rulebody"]},
     {"name": "wcase", "symbols": ["case"], "postprocess":  function(d) {
         return {
                  type : "case",
@@ -50,7 +51,8 @@ var grammar = {
         } 
         },
     {"name": "case", "symbols": ["unit"], "postprocess": id},
-    {"name": "case", "symbols": ["case", "_+", {"literal":"|"}, "_+", "case"]},
+    {"name": "case$string$1", "symbols": [{"literal":"|"}, {"literal":"|"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "case", "symbols": ["case", "_+", "case$string$1", "_+", "case"], "postprocess": function(d){ return [d[0],null,"|",null,d[4]]}},
     {"name": "case", "symbols": [{"literal":"("}, "case", {"literal":")"}]},
     {"name": "case", "symbols": ["case", "wesym"]},
     {"name": "unit", "symbols": ["term"], "postprocess": id},
