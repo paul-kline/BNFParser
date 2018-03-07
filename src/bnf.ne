@@ -26,7 +26,7 @@ nonterminal -> "<" ident ">"  {% function(d) {
     } 
 %}
 
-ident -> [a-zA-Z_]:+ {% function(d) { 
+ident -> ([a-zA-Z_] | [0-9] ):+ {% function(d) { 
   return  {
      type : "ident",
      value : d[0].join("") 
@@ -147,7 +147,7 @@ validterminal -> [a-zA-Z0-9] | symbol  {% id %}
 symbol ->  "|" | " " | "-" | "!" | "#" | "$" | "%" 
 | "&" | "(" | ")" | "*" | "+" | "," | "-" | "." 
 | "/" | ":" | ";" | ">" | "=" | "<" | "?" | "@" 
-| "[" | "\\" | "]" | "^" | "_" | "`" | "{" | "}" | "~"  {% id %}
+| "[" | "\\" | "]" | "^" | "_" | "`" | "{" | "}" | "~" | "-" | "'"  {% id %}
 
 _+ -> [\s]:+     {% function(d) {return null } %}
 

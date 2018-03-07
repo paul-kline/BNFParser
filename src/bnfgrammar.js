@@ -33,8 +33,12 @@ var grammar = {
                };
         } 
         },
-    {"name": "ident$ebnf$1", "symbols": [/[a-zA-Z_]/]},
-    {"name": "ident$ebnf$1", "symbols": ["ident$ebnf$1", /[a-zA-Z_]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "ident$ebnf$1$subexpression$1", "symbols": [/[a-zA-Z_]/]},
+    {"name": "ident$ebnf$1$subexpression$1", "symbols": [/[0-9]/]},
+    {"name": "ident$ebnf$1", "symbols": ["ident$ebnf$1$subexpression$1"]},
+    {"name": "ident$ebnf$1$subexpression$2", "symbols": [/[a-zA-Z_]/]},
+    {"name": "ident$ebnf$1$subexpression$2", "symbols": [/[0-9]/]},
+    {"name": "ident$ebnf$1", "symbols": ["ident$ebnf$1", "ident$ebnf$1$subexpression$2"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "ident", "symbols": ["ident$ebnf$1"], "postprocess":  function(d) { 
         return  {
            type : "ident",
@@ -163,7 +167,9 @@ var grammar = {
     {"name": "symbol", "symbols": [{"literal":"`"}]},
     {"name": "symbol", "symbols": [{"literal":"{"}]},
     {"name": "symbol", "symbols": [{"literal":"}"}]},
-    {"name": "symbol", "symbols": [{"literal":"~"}], "postprocess": id},
+    {"name": "symbol", "symbols": [{"literal":"~"}]},
+    {"name": "symbol", "symbols": [{"literal":"-"}]},
+    {"name": "symbol", "symbols": [{"literal":"'"}], "postprocess": id},
     {"name": "_+$ebnf$1", "symbols": [/[\s]/]},
     {"name": "_+$ebnf$1", "symbols": ["_+$ebnf$1", /[\s]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "_+", "symbols": ["_+$ebnf$1"], "postprocess": function(d) {return null }},
