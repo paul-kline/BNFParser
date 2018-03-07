@@ -45,9 +45,10 @@
 
 <body>
     <div class="w3-bar w3-green">
+            <a style="text-decoration:none" target="_blank" href="./about.html">
         <div class="w3-bar-item w3-btn w3-left w3-border w3-round" id="about">
-            <a style="text-decoration:none" target="_blank" href="./about.html">About</a>
-        </div>
+            About
+        </div></a>
         <div class="w3-dropdown-hover">
                 <button class="w3-button">Examples</button>
                 <div class="w3-dropdown-content w3-bar-block w3-card-4">
@@ -125,7 +126,7 @@
     </div>
         <div class="w3-text-gray">Enter your BNF (or EBNF) below. </div>
         <div class="w3-row ">
-            <div class="code-mirror-holder" id="buffer" onmouseup="onCodeSizeMouseUp(this)" onmousedown="onCodeSizeMouseDown(this)">
+            <div class="code-mirror-holder" id="buffer" ontouchstart="onCodeSizeMouseDown(this)" ontouchend="onCodeSizeMouseUp(this)" onmouseup="onCodeSizeMouseUp(this)" onmousedown="onCodeSizeMouseDown(this)">
                 <div class="w3-card-4" >
                     <textarea rows="20" cols="50" id="textinput" ><gpa> ::= "4.0" | <leading> "." <trailing>
 <leading> ::= [0-3]

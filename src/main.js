@@ -176,9 +176,10 @@ global.bnfsubmitted = bnfsubmitted //need this scope for button click entry.
 global.onGenerate = onGenerate
 
 function onGenerate(){
-    let term = getTermToGenerate();
-    let rate = getGenerationRate();
-    if(isCompiled()){
+    
+    if(isCompiled() || bnfsubmitted()){
+        let term = getTermToGenerate();
+        let rate = getGenerationRate();
         let grammarjs = global.state.compiledgrammar;
         let currentString = document.getElementById("testinput").value;
         let res = generateTest(grammarjs,term,rate);
@@ -191,7 +192,7 @@ function onGenerate(){
 
         console.log("generated string:", res);
     }else{
-        setBNFError("Please compile your grammar first.");
+        //setBNFError("Please compile your grammar first.");
     }
 
 
