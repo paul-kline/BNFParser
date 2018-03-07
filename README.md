@@ -4,7 +4,7 @@ Needed packages:
 npm install -g nearley firebase-tools beefy watchify browserify  
 (codemirror?)
 
-npm install nearley-generator
+npm install nearley-generator codemirror
 
 
 To compile a new bnf.ne:
@@ -15,11 +15,6 @@ watchify --debug .\src\main.js -o .\dist\bundle.js -v
 
 Set up auto-reloading/localwebserver from dist dir:
 beefy ..\src\main.js --live --index=./index.html
-
-
-
-
-
 
 
 To deploy:

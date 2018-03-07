@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/codemirror.css">
     <link rel="stylesheet" href="css/gen.css">
     <link rel="stylesheet" href="css/show-hint.css">
-
+    <link rel="stylesheet" href="css/bnf.css">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
@@ -46,14 +46,14 @@
 <body>
     <div class="w3-bar w3-green">
         <div class="w3-bar-item w3-btn w3-left w3-border w3-round" id="about">
-            <a style="text-decoration:none" href="./about.html">About</a>
+            <a style="text-decoration:none" target="_blank" href="./about.html">About</a>
         </div>
         <div class="w3-dropdown-hover">
                 <button class="w3-button">Examples</button>
                 <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                  <a href="./?bnf=%3Creal%3E%20%3A%3A%3D%20%3Cpos%3E%20%7C%20%3Cneg%3E%0A%3Cpos%3E%20%3A%3A%3D%20(%220%22%20%7C%20%20%5B1-9%5D%20%5B0-9%5D%2B)%20(%22.%22%20%5B0-9%5D%2B%20)%3F%0A%3Cneg%3E%20%3A%3A%3D%20%22-%22%20%3Cpos%3E" class="w3-bar-item w3-button">Real Numbers</a>
-                  <a href="./?bnf=%3Cprogram%3E%20%3A%3A%3D%20%3Cstatement%3E%0A%0A%3Cstatement%3E%20%3A%3A%3D%20%3Cass_statement%3E%0A%20%7C%20%3Cwhile_statement%3E%0A%20%7C%20%3Cif_statement%3E%0A%20%7C%20%22print(%22%20%3Cexp%3E%20%22)%22%0A%20%7C%20%3Cstatement%3E%20%22%3B%22%20%3Cstatement%3E%0A%0A%3Cass_statement%3E%20%3A%3A%3D%20%3Cvar%3E%20%22%3A%3D%22%20%3Cexp%3E%0A%3Cwhile_statement%3E%20%3A%3A%3D%20%22while(%22%20%3Cb_exp%3E%20%22)%7B%22%20%3Cstatement%3E%20%22%7D%22%0A%3Cif_statement%3E%20%3A%3A%3D%20%22if(%22%20%3Cb_exp%3E%20%22)%7B%22%20%3Cstatement%3E%20%22%7D%22%0A%20%7C%20%22if(%22%20%3Cb_exp%3E%20%22)%7B%22%20%3Cstatement%3E%20%22%7D%22%0A%20%20%20%22else%20%7B%22%20%3Cstatement%3E%20%22%7D%22%0A%20%0A%20%0A%3Cexp%3E%20%3A%3A%3D%20%3Cb_exp%3E%20%7C%20%3Cm_exp%3E%0A%0A%0A%3Cm_exp%3E%20%3A%3A%3D%20%3Cnum%3E%0A%20%7C%20%22(%22%20%3Cm_exp%3E%20%22)%22%0A%20%7C%20%3Cm_exp%3E%20%3Cmop%3E%20%3Cm_exp%3E%0A%20%7C%20%3Cvar%3E%0A%3Cnum%3E%20%3A%3A%3D%20%5B0-9%5D%2B%0A%3Cmop%3E%20%3A%3A%3D%20%22%2B%22%20%7C%20%22-%22%20%7C%20%22*%22%20%7C%20%22%2F%22%0A%3Cvar%3E%20%3A%3A%3D%20%5Ba-z%5D%2B%0A%0A%3Cb_exp%3E%20%3A%3A%3D%20%3Cbool%3E%0A%20%7C%20%22(%22%20%3Cb_exp%3E%20%22)%22%0A%20%7C%20%22!%22%20%3Cb_exp%3E%0A%20%7C%20%3Cb_exp%3E%20%3Cbop%3E%20%3Cb_exp%3E%0A%20%7C%20%3Cvar%3E%0A%20%7C%20%3Cm_exp%3E%20%3Ceq_op%3E%20%3Cm_exp%3E%0A%20%7C%20%3Cb_exp%3E%20%3Ceq_op%3E%20%3Cb_exp%3E%0A%20%7C%20%3Cm_exp%3E%20%3Ccmp_op%3E%20%3Cm_exp%3E%0A%3Cbop%3E%20%3A%3A%3D%20%22%26%26%22%20%7C%20%22%7C%7C%22%0A%3Cbool%3E%20%3A%3A%3D%20%22true%22%20%7C%20%22false%22%0A%3Ceq_op%3E%20%3A%3A%3D%20%22%3D%3D%22%20%7C%20%22!%3D%22%0A%3Ccmp_op%3E%20%3A%3A%3D%20%22%3E%22%20%7C%20%22%3E%3D%22%20%7C%20%22%3C%22%20%7C%20%22%3C%3D%22%0A%0A" class="w3-bar-item w3-button">Program</a>
-                  <a href="./bnf=%3Cdate%3E%20%3A%3A%3D%20%3Cmonth%3E%20%22%2F%22%20%3Cday%3E%20%22%2F%22%20%3Cyear%3E%0A%3Cmonth%3E%20%3A%3A%3D%20%221%22%20%5B0-2%5D%20%7C%20%220%22%20%5B1-9%5D%0A%3Cday%3E%20%3A%3A%3D%20%220%22%20%5B1-9%5D%20%7C%20%5B1-2%5D%20%5B0-9%5D%20%7C%20%223%22%20%5B0-1%5D%0A%3Cyear%3E%20%3A%3A%3D%20%5B0-9%5D%20%5B0-9%5D%20%5B0-9%5D%20%5B0-9%5D" class="w3-bar-item w3-button">Date</a>
+                  <a href="./?bnf=%3Creal%3E%20%3A%3A%3D%20%3Cpos%3E%20%7C%20%3Cneg%3E%0A%3Cpos%3E%20%3A%3A%3D%20(%220%22%20%7C%20%20%5B1-9%5D%20%5B0-9%5D%2B)%20(%22.%22%20%5B0-9%5D%2B%20)%3F%0A%3Cneg%3E%20%3A%3A%3D%20%22-%22%20%3Cpos%3E&name=Real%20Numbers" class="w3-bar-item w3-button">Real Numbers</a>
+                  <a href="./?bnf=%3Cprogram%3E%20%3A%3A%3D%20%3Cstatement%3E%0A%0A%3Cstatement%3E%20%3A%3A%3D%20%3Cass_statement%3E%0A%20%7C%20%3Cwhile_statement%3E%0A%20%7C%20%3Cif_statement%3E%0A%20%7C%20%22print(%22%20%3Cexp%3E%20%22)%22%0A%20%7C%20%3Cstatement%3E%20%22%3B%22%20%3Cstatement%3E%0A%0A%3Cass_statement%3E%20%3A%3A%3D%20%3Cvar%3E%20%22%3A%3D%22%20%3Cexp%3E%0A%3Cwhile_statement%3E%20%3A%3A%3D%20%22while(%22%20%3Cb_exp%3E%20%22)%7B%22%20%3Cstatement%3E%20%22%7D%22%0A%3Cif_statement%3E%20%3A%3A%3D%20%22if(%22%20%3Cb_exp%3E%20%22)%7B%22%20%3Cstatement%3E%20%22%7D%22%0A%20%7C%20%22if(%22%20%3Cb_exp%3E%20%22)%7B%22%20%3Cstatement%3E%20%22%7D%22%0A%20%20%20%22else%20%7B%22%20%3Cstatement%3E%20%22%7D%22%0A%20%0A%20%0A%3Cexp%3E%20%3A%3A%3D%20%3Cb_exp%3E%20%7C%20%3Cm_exp%3E%0A%0A%0A%3Cm_exp%3E%20%3A%3A%3D%20%3Cnum%3E%0A%20%7C%20%22(%22%20%3Cm_exp%3E%20%22)%22%0A%20%7C%20%3Cm_exp%3E%20%3Cmop%3E%20%3Cm_exp%3E%0A%20%7C%20%3Cvar%3E%0A%3Cnum%3E%20%3A%3A%3D%20%5B0-9%5D%2B%0A%3Cmop%3E%20%3A%3A%3D%20%22%2B%22%20%7C%20%22-%22%20%7C%20%22*%22%20%7C%20%22%2F%22%0A%3Cvar%3E%20%3A%3A%3D%20%5Ba-z%5D%2B%0A%0A%3Cb_exp%3E%20%3A%3A%3D%20%3Cbool%3E%0A%20%7C%20%22(%22%20%3Cb_exp%3E%20%22)%22%0A%20%7C%20%22!%22%20%3Cb_exp%3E%0A%20%7C%20%3Cb_exp%3E%20%3Cbop%3E%20%3Cb_exp%3E%0A%20%7C%20%3Cvar%3E%0A%20%7C%20%3Cm_exp%3E%20%3Ceq_op%3E%20%3Cm_exp%3E%0A%20%7C%20%3Cb_exp%3E%20%3Ceq_op%3E%20%3Cb_exp%3E%0A%20%7C%20%3Cm_exp%3E%20%3Ccmp_op%3E%20%3Cm_exp%3E%0A%3Cbop%3E%20%3A%3A%3D%20%22%26%26%22%20%7C%20%22%7C%7C%22%0A%3Cbool%3E%20%3A%3A%3D%20%22true%22%20%7C%20%22false%22%0A%3Ceq_op%3E%20%3A%3A%3D%20%22%3D%3D%22%20%7C%20%22!%3D%22%0A%3Ccmp_op%3E%20%3A%3A%3D%20%22%3E%22%20%7C%20%22%3E%3D%22%20%7C%20%22%3C%22%20%7C%20%22%3C%3D%22%0A%0A&name=Simple%20Programming%20Language" class="w3-bar-item w3-button">Program</a>
+                  <a href="./?bnf=%3Cdate%3E%20%3A%3A%3D%20%3Cmonth%3E%20%22%2F%22%20%3Cday%3E%20%22%2F%22%20%3Cyear%3E%0A%3Cmonth%3E%20%3A%3A%3D%20%221%22%20%5B0-2%5D%20%7C%20%220%22%20%5B1-9%5D%0A%3Cday%3E%20%3A%3A%3D%20%220%22%20%5B1-9%5D%20%7C%20%5B1-2%5D%20%5B0-9%5D%20%7C%20%223%22%20%5B0-1%5D%0A%3Cyear%3E%20%3A%3A%3D%20%5B0-9%5D%20%5B0-9%5D%20%5B0-9%5D%20%5B0-9%5D&name=Date%20Format" class="w3-bar-item w3-button">Date</a>
                 </div>
               </div>
         <div class="w3-dropdown-hover w3-green w3-right" style="display:none" id="accountbtn">
@@ -73,7 +73,7 @@
          Your app may use that space for branding, controls and other customizations.-->
     <h1 class="w3-center">Welcome to the BNF Playground</h1>
     <h1 class="w3-center">Beta!</h1>
-    <div class="w3-container w3-center">A place to design and test context free grammars using Bachus Naur Form</div>
+    <div class="w3-container w3-center">A place to design and test context free grammars using Backus-Naur Form or Extended Backus-Naur Form</div>
 
     <div class="w3-container w3-right" id="greeting"></div>
 
@@ -104,18 +104,34 @@
 
             </li>
         </ul>
-        <br>
+        
     </p>
+    <p>Life Hacks:
+        <ul>
+            <li>
+                Basic textual auto-complete is available via ctrl+space
+            </li>
+        </ul>
+
+    </p>
+    <br>
 </div>
 
 </div>
+   
     <div id="editbnf" class="w3-container w3-margin">
-        <div>Enter your BNF (or EBNF) below. </div>
         <div class="w3-row">
-            <div class="w3-card-4">
-                <textarea rows="20" cols="50" id="textinput"><gpa> ::= "4.0" | <leading> "." <trailing>
+        <input class="w3-input w3-col l4 s12 w3-xlarge" id="grammartitle" type="text" placeholder="Untitled">
+    </div>
+        <div class="w3-text-gray">Enter your BNF (or EBNF) below. </div>
+        <div class="w3-row ">
+            <div class="code-mirror-holder" id="buffer" onmouseup="onCodeSizeMouseUp(this)" onmousedown="onCodeSizeMouseDown(this)">
+                <div class="w3-card-4" >
+                    <textarea rows="20" cols="50" id="textinput" ><gpa> ::= "4.0" | <leading> "." <trailing>
 <leading> ::= [0-3]
 <trailing> ::= [0-9]</textarea>
+ 
+                </div>
             </div>
             <div class="w3-cell-row w3-margin-top">
                 <div class="w3-left w3-cell-middle  w3-cell  w3-btn w3-black w3-border-blue w3-ripple w3-round" id="submit" onclick="bnfsubmitted()">Compile BNF</div>
@@ -181,7 +197,7 @@
     <script src="myfirebaseauth.js"></script>
 
     <script src="bundle.js"></script>
-    <script src="visuals.js"></script>
+    <script src="visuals.js" async></script>
 
 </body>
 

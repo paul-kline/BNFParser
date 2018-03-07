@@ -142,7 +142,8 @@ function populateSelector(arr){
 function generateSaveURL(){
     let enteredText = getEnteredCode();
     let encoded =  encodeURIComponent(enteredText);
-    return window.location.origin + window.location.pathname + "?bnf=" + encoded;
+    let tit = encodeURIComponent(getGrammarName());
+    return window.location.origin + window.location.pathname + "?bnf=" + encoded + "&name=" + tit;
 }
 //called when "compile bnf" is clicked.
 function bnfsubmitted(){
@@ -173,12 +174,7 @@ function bnfsubmitted(){
 }
 global.bnfsubmitted = bnfsubmitted //need this scope for button click entry.
 global.onGenerate = onGenerate
-function getGenerationRate(){
-    return 0.7;
-}
-function getTermToGenerate(){
-    return document.getElementById("selector").value;
-}
+
 function onGenerate(){
     let term = getTermToGenerate();
     let rate = getGenerationRate();
@@ -200,9 +196,7 @@ function onGenerate(){
 
 
 }
-function setBNFError(str){
-    document.getElementById("bnferror").innerHTML = "<pre>" +  str.replace(/</g,"&lt").replace(/>/g,"&gt") + "</pre>";
-}
+
 function generateTest(jsgrammar,term,rate){
     console.log("nearleygen:", nearleygen);
     let g = new nearleygen.default(jsgrammar);
@@ -340,15 +334,6 @@ function parseTreeToNearley2(tree, state) {
     return state;
 } 
  
-function getEnteredCode(){
-    return editor.doc.getValue();
-}
-function setEnteredCode(str){
-    editor.doc.setValue(str);
-}
-function getTestString(){
-    return document.getElementById("testinput").value;
-}
 
 function initializeBNFEditor(){
     let editor = codemirror.fromTextArea(document.getElementById("textinput"), {
@@ -361,6 +346,11 @@ function initializeBNFEditor(){
     editor.on("change", onEditorChanged);
 }
 
+function onCodeResize(ths){
+    console.log(ths);
+    console.log(ths.style.height)
+}
+global.onCodeResize = onCodeResize
 function onEditorChanged(myself, changeObj){
     //console.log("onchange event",myself,changeObj);
     getCompilationStatus().innerText = compilationStatus.modified;
@@ -386,9 +376,11 @@ function loadGetBNF(){
     let ustr = window.location.href;
     let url = new URL(ustr);
     let bnf = url.searchParams.get("bnf");
+    let tit = url.searchParams.get("name");
     if(bnf){
         console.log("bnf is here! it should be: ", decodeURIComponent(bnf));
         setEnteredCode(decodeURIComponent(bnf));
+        setGrammarName(tit? tit : "");
     }
     console.log(bnf);
 
@@ -403,3 +395,31 @@ function onSaveToURL(){
 }
 global.onSaveToURL = onSaveToURL;
 loadGetBNF();
+
+
+
+//-------------GET SET
+function setGrammarName(str){
+    document.getElementById("grammartitle").value = str;
+}
+function getGrammarName(){
+   return document.getElementById("grammartitle").value;
+}
+function getGenerationRate(){
+    return 0.7;
+}
+function getTermToGenerate(){
+    return document.getElementById("selector").value;
+}
+function getEnteredCode(){
+    return editor.doc.getValue();
+}
+function setEnteredCode(str){
+    editor.doc.setValue(str);
+}
+function getTestString(){
+    return document.getElementById("testinput").value;
+}
+function setBNFError(str){
+    document.getElementById("bnferror").innerHTML = "<pre>" +  str.replace(/</g,"&lt").replace(/>/g,"&gt") + "</pre>";
+}
