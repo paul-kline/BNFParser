@@ -43,7 +43,7 @@
 
 </head>
 
-<body>
+<body class="w3-mobile">
     <div class="w3-bar w3-green">
             <a style="text-decoration:none" target="_blank" href="./about.html">
         <div class="w3-bar-item w3-btn w3-left w3-border w3-round" id="about">
@@ -92,10 +92,10 @@
   </p>
   <p>Syntactic Sugar:
         <ul>
-            <li>Single digit and letter intervals are allowed. For instance, instead of writing: &lt;e&gt; ::= "1" | "2" | "3", you can write &lt;e&gt; ::=[1-3]</li>
+            <li>Single digit and letter intervals are allowed. For instance, instead of writing: &lt;e&gt; ::= "1" | "2" | "3", you can write &lt;e&gt; ::= [1-3]</li>
             <li>Basic EBNF is supported. Specifically:
                 <ul>
-                    <li>"+" can be used to mean "one or more of the previous." For example: &lt;e&gt; ::=[a-z]+ can produce any non-zero length sequence of characters.</li>
+                    <li>"+" can be used to mean "one or more of the previous." For example: &lt;e&gt; ::= [a-z]+ can produce any non-zero length sequence of characters.</li>
                     <li>"*" can be used to mean "zero or more of the previous."</li>
                     <li>"?" can be used to mean "zero or one occurances of the previous."</li>
                     <li>"(" ")" can be used to group elements. For example, &lt;e&gt; ::= ([1-9] [a-z])+ allows strings such as: 1a, 4f, 4g3f9d, etc.</li>
