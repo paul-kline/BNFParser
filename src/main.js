@@ -71,37 +71,6 @@ function parseBNF(str) {
 }
 
 
-//----------------------------
-// Parser.prototype.finish = function() {
-//     // Return the possible parsings
-//     var considerations = [];
-//     var start = this.grammar.start;
-//     var column = this.table[this.table.length - 1]
-//     let ggag = Symbol();
-//     try{
-//         column.states.forEach(function (t) {
-//             if (t.rule.name === start
-//                     && t.dot === t.rule.symbols.length
-//                     && t.reference === 0
-//                     && t.data !== Parser.fail
-//                     && considerations.length < 1) {
-//                 considerations.push(t);
-//                 throw ggag;
-//             }
-//         });
-//     }catch(e){
-//         if(e === ggag){
-
-//         }else{
-//             throw e;
-//         }
-//     }
-    
-//     return considerations.map(function(c) {return c.data; });
-// };
-
-//-------------------------------------
-
 function checkstate(teststate){
     let result = {isError : false,
                   message : "\n"};
@@ -326,6 +295,10 @@ function parseTreeToNearley2(tree, state) {
         }
         if (tree.type == "esym") {
             state.nearley += ":" + tree.value
+            return state;
+        }
+        if(tree.type == "comment"){
+            state.nearley += tree.value;
             return state;
         }
     }
