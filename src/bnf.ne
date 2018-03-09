@@ -16,7 +16,7 @@ rule -> nonterminal _+ "::=" _+ rulebody {% function(d) {
                      }
            };
     } 
-%} # | comment
+%} | comment
 
 nonterminal -> "<" ident ">"  {% function(d) {
     return {
@@ -35,14 +35,14 @@ ident -> ([a-zA-Z_] | [0-9] ):+ {% function(d) {
 
 rulebody -> rb2
 
-#comment -> "#" .:* "\n":? {% function(d){
-#    return {
-#            type : "comment",
-#            value : d[0] + d[1].join("") + "\n"
+comment -> "/*" .:* "*/" {% function(d){
+    return {
+            type : "comment",
+            value : d[1].join("")
 
-#        }
-#    }
-#    %}
+        }
+    }
+    %}
 
 rb2 -> rb2 _+ t | rb2 _+ "|" _+   t | t
 t -> t2 wesym | t2 

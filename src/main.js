@@ -298,7 +298,7 @@ function parseTreeToNearley2(tree, state) {
             return state;
         }
         if(tree.type == "comment"){
-            state.nearley += tree.value;
+            //state.nearley += tree.value;
             return state;
         }
     }

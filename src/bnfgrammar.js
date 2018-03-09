@@ -26,6 +26,7 @@ var grammar = {
                };
         } 
         },
+    {"name": "rule", "symbols": ["comment"]},
     {"name": "nonterminal", "symbols": [{"literal":"<"}, "ident", {"literal":">"}], "postprocess":  function(d) {
         return {
                  type : "nonterminal",
@@ -46,6 +47,18 @@ var grammar = {
         }
         } },
     {"name": "rulebody", "symbols": ["rb2"]},
+    {"name": "comment$string$1", "symbols": [{"literal":"/"}, {"literal":"*"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "comment$ebnf$1", "symbols": []},
+    {"name": "comment$ebnf$1", "symbols": ["comment$ebnf$1", /./], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "comment$string$2", "symbols": [{"literal":"*"}, {"literal":"/"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "comment", "symbols": ["comment$string$1", "comment$ebnf$1", "comment$string$2"], "postprocess":  function(d){
+        return {
+                type : "comment",
+                value : d[1].join("")
+        
+            }
+        }
+        },
     {"name": "rb2", "symbols": ["rb2", "_+", "t"]},
     {"name": "rb2", "symbols": ["rb2", "_+", {"literal":"|"}, "_+", "t"]},
     {"name": "rb2", "symbols": ["t"]},
